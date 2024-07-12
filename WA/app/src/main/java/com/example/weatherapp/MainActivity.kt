@@ -9,26 +9,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,31 +26,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
-import coil.size.Size
 import com.example.weatherapp.screens.FiveDaysScreen
 import com.example.weatherapp.screens.SearchScreen
 import com.example.weatherapp.screens.TodayScreen
 import com.example.weatherapp.ui.theme.WeatherAppTheme
 import com.example.weatherapp.ui.theme.White
-import com.example.weatherapp.widgets.IconWithText
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.roundToInt
 
 fun requestLocationPermission(
     activity: ComponentActivity,
@@ -171,7 +148,6 @@ fun ScreenHolder(vm: MainViewModel, locationAllowed: Boolean){
                                 .background(color = animatedBgColor)
                         ) {
                             TodayScreen(
-                                vm = vm,
                                 modifier = Modifier.padding(innerPadding),
                                 changeBackground = { color ->
                                     bgColor = color
@@ -186,7 +162,6 @@ fun ScreenHolder(vm: MainViewModel, locationAllowed: Boolean){
                                 .background(color = animatedBgColor)
                         ) {
                             FiveDaysScreen(
-                                vm = vm,
                                 modifier = Modifier.padding(innerPadding),
                                 changeBackground = { color ->
                                     bgColor = color
@@ -201,7 +176,6 @@ fun ScreenHolder(vm: MainViewModel, locationAllowed: Boolean){
                                 .background(color = animatedBgColor)
                         ) {
                             SearchScreen(
-                                vm = vm,
                                 modifier = Modifier.padding(innerPadding),
                                 changeBackground = { color ->
                                     bgColor = color

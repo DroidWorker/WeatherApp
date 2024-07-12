@@ -52,6 +52,14 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature:currentweather"))
+    implementation(project(":feature:fivadaysweather"))
+    implementation(project(":feature:searchweather"))
+    implementation(project(":feature:widgets"))
+    implementation(project(":network"))
+    implementation(project(":domain"))
+    implementation(project(":di"))
+    implementation(project(":data"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
