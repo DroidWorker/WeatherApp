@@ -34,8 +34,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.weatherapp.screens.FiveDaysScreen
-import com.example.weatherapp.screens.SearchScreen
-import com.example.weatherapp.screens.TodayScreen
+import com.example.currentweather.TodayScreen
 import com.example.weatherapp.ui.theme.WeatherAppTheme
 import com.example.weatherapp.ui.theme.White
 import dagger.hilt.android.AndroidEntryPoint
@@ -175,7 +174,7 @@ fun ScreenHolder(vm: MainViewModel, locationAllowed: Boolean){
                                 .fillMaxSize()
                                 .background(color = animatedBgColor)
                         ) {
-                            SearchScreen(
+                            com.example.searchweather.SearchScreen(
                                 modifier = Modifier.padding(innerPadding),
                                 changeBackground = { color ->
                                     bgColor = color

@@ -53,9 +53,9 @@ android {
 
 dependencies {
     implementation(project(":feature:currentweather"))
-    implementation(project(":feature:fivadaysweather"))
+    implementation(project(":feature:fivedaysweather"))
     implementation(project(":feature:searchweather"))
-    implementation(project(":feature:widgets"))
+    implementation(project(":feature:widget"))
     implementation(project(":network"))
     implementation(project(":domain"))
     implementation(project(":di"))

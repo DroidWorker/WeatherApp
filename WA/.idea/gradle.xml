@@ -10,7 +10,15 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/app/feature" />
+            <option value="$PROJECT_DIR$/data" />
+            <option value="$PROJECT_DIR$/di" />
+            <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/currentweather" />
+            <option value="$PROJECT_DIR$/feature/fivedaysweather" />
+            <option value="$PROJECT_DIR$/feature/searchweather" />
+            <option value="$PROJECT_DIR$/feature/widget" />
+            <option value="$PROJECT_DIR$/network" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

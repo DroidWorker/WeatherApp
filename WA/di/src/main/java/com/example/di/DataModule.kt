@@ -1,11 +1,11 @@
 package com.example.weatherapp.di
 
 import android.content.Context
-import com.example.weatherapp.data.ConnectivityRepositoryImpl
-import com.example.weatherapp.data.WeatherRepositoryImpl
+import com.example.data.ConnectivityRepositoryImpl
+import com.example.data.WeatherRepositoryImpl
+import com.example.domain.ConnectivityRepository
+import com.example.domain.WeatherRepository
 import com.example.network.retrofit.WeatherApi
-import com.example.weatherapp.domain.ConnectivityRepository
-import com.example.weatherapp.domain.WeatherRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,13 +21,13 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideRepository(weatherApi: com.example.network.retrofit.WeatherApi):WeatherRepository {
+    fun provideRepository(weatherApi: WeatherApi): WeatherRepository {
         return WeatherRepositoryImpl(weatherApi = weatherApi)
     }
 
     @Provides
     @Singleton
-    fun provideConnectionRepository(@ApplicationContext context: Context):ConnectivityRepository {
+    fun provideConnectionRepository(@ApplicationContext context: Context): ConnectivityRepository {
         return ConnectivityRepositoryImpl(context)
     }
 

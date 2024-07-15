@@ -1,4 +1,4 @@
-package com.example.weatherapp.screens
+package com.example.currentweather
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,9 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.example.currentweather.CurrentWeatherVM
-import com.example.currentweather.R
-import com.example.widgets.IconWithText
+import com.example.widget.IconWithText
+import com.example.widget.R
 import kotlin.math.roundToInt
 
 @Composable
@@ -67,9 +66,18 @@ fun TodayScreen(modifier: Modifier, changeBackground: (Color) -> Unit,) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ){
-            IconWithText(ImageVector.vectorResource(id = R.drawable.humidity_percentage_24dp_ffffff_fill0_wght400_grad0_opsz24), weatherState!!.humidity.toString())
-            IconWithText(ImageVector.vectorResource(id = R.drawable.min), "${weatherState!!.temp_min}")
-            IconWithText(ImageVector.vectorResource(id = R.drawable.max), "${weatherState!!.temp_max}")
+            IconWithText(
+                ImageVector.vectorResource(id = R.drawable.humidity_percentage_24dp_ffffff_fill0_wght400_grad0_opsz24),
+                weatherState!!.humidity.toString()
+            )
+            IconWithText(
+                ImageVector.vectorResource(id = R.drawable.min),
+                "${weatherState!!.temp_min}"
+            )
+            IconWithText(
+                ImageVector.vectorResource(id = R.drawable.max),
+                "${weatherState!!.temp_max}"
+            )
             Text(text = weatherState!!.weather.description, color = Color.White, fontSize = 20.sp)
         }
     } else if(errorState!=null){

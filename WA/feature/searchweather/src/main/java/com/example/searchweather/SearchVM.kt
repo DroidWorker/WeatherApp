@@ -1,12 +1,10 @@
 package com.example.searchweather
 
-import android.content.Context
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.SearchWeatherByCityUC
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -18,8 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchVM @Inject constructor(
-    private val searchWeatherByCityUC: SearchWeatherByCityUC,
-    private val checkConnectivityUC: com.example.domain.usecase.ObserveConnectivityUC
+    private val searchWeatherByCityUC: SearchWeatherByCityUC
 ): ViewModel() {
 
     //Search states

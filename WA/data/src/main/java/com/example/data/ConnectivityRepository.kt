@@ -2,11 +2,11 @@ package com.example.data
 
 import android.content.Context
 import android.net.ConnectivityManager
-import com.example.weatherapp.domain.ConnectivityRepository
+import com.example.domain.ConnectivityRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class ConnectivityRepositoryImpl(context: Context): ConnectivityRepository{
+class ConnectivityRepositoryImpl(context: Context): ConnectivityRepository {
     private  val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
