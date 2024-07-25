@@ -1,4 +1,4 @@
-package com.example.weatherapp.screens
+package com.example.fivedaysweather
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,10 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.fivedaysweather.FiveDaysVM
 import com.example.widget.WeatherItem
 
 @Composable
@@ -35,7 +35,7 @@ fun FiveDaysScreen(modifier: Modifier, changeBackground: (Color) -> Unit) {
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Text(text = "В ближайшие 5 дней", fontSize = 30.sp, color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
+        Text(text = stringResource(R.string.in_5_days), fontSize = 30.sp, color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
         Text(text = weatherState!!.city, color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
         LazyColumn {
             items(weatherState!!.weatherList.size){item ->

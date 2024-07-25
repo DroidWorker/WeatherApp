@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">currentWeather</string>
+    <string name="cant_get_location">Невозможно получить местоположение</string>
+    <string name="eeee_d_mmmm">EEEE, d MMMM</string>
+    <string name="hh_mm">HH:mm</string>
+    <string name="eeee_d_mmmmhh_mm">"EEEE, d MMMM HH:mm"</string>
 </resources>

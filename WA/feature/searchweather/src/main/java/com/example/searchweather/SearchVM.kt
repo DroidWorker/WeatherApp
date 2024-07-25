@@ -1,10 +1,12 @@
 package com.example.searchweather
 
+import android.content.Context
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.SearchWeatherByCityUC
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,28 +18,49 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchVM @Inject constructor(
-    private val searchWeatherByCityUC: SearchWeatherByCityUC
+    private val searchWeatherByCityUC: SearchWeatherByCityUC,
+    private val checkConnectivityUC: com.example.domain.usecase.ObserveConnectivityUC,
+    @ApplicationContext private val context: Context
 ): ViewModel() {
 
     //Search states
     private val _searchedWeatherState = MutableStateFlow<com.example.domain.WeatherCurrent?>(null)
-    private val _inSearchState = MutableStateFlow<Boolean>(false)
+    private val _inSearchState = MutableStateFlow(false)
     private val _inError = MutableStateFlow<String?>(null)
-    private val _isFirstLaunch = MutableStateFlow<Boolean>(true)
-    private val _searchText = MutableStateFlow<String>("")
+    private val _isFirstLaunch = MutableStateFlow(true)
+    private val _searchText = MutableStateFlow("")
+    private val _queries = MutableStateFlow<List<String>>(emptyList())
     val searchedWeatherState: StateFlow<com.example.domain.WeatherCurrent?> get() = _searchedWeatherState
     val inSearchState: StateFlow<Boolean> get() = _inSearchState
     val inError: StateFlow<String?> get() = _inError
     val isFirstLaunch: StateFlow<Boolean> get() = _isFirstLaunch
     val searchText: StateFlow<String> get() = _searchText
+    val queries: StateFlow<List<String>> get() = _queries
 
-    fun searchWeather(){
+    private val _connectivityState = MutableStateFlow(false)
+    val connectivityState: StateFlow<Boolean> get() = _connectivityState
+
+    init {
+        viewModelScope.launch {
+            checkConnectivityUC.invoke().collect { connectivity ->
+                _connectivityState.value = connectivity
+            }
+        }
+        viewModelScope.launch {
+            searchWeatherByCityUC.getUserQueries().collect{
+                _queries.value = it
+            }
+        }
+    }
+
+    private fun searchWeather(){
+        _inSearchState.value = false
         _isFirstLaunch.value = false
         viewModelScope.launch {
+            if(searchText.value.isNotEmpty())searchWeatherByCityUC.saveQuery(searchText.value)
             searchWeatherByCityUC.invoke(searchText.value).collect { weather ->
                 _searchedWeatherState.value = weather
-                if(weather==null) _inError.value="По данному запросу ничего не найдено"
-                _inSearchState.value = false
+                if(weather==null) _inError.value= context.getString(R.string.nothing_to_show)
             }
         }
     }
@@ -45,9 +68,12 @@ class SearchVM @Inject constructor(
         _searchText.value = q
     }
 
+    fun onSearchbarStateChanged(state:Boolean){
+        _inSearchState.value = state
+    }
+
     fun  onPressSearch (q: String) {
         _searchText.value = q
-        _inSearchState.value = true
         searchWeather()
     }
 

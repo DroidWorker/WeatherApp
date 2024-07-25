@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">searchweather</string>
+    <string name="feels_like">Ощущается как %1$s</string>
+    <string name="nothing_to_show">По данному запросу ничего не найдено</string>
 </resources>

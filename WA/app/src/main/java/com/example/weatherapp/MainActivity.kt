@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -33,11 +34,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.weatherapp.screens.FiveDaysScreen
+import com.example.fivedaysweather.FiveDaysScreen
 import com.example.currentweather.TodayScreen
 import com.example.weatherapp.ui.theme.WeatherAppTheme
 import com.example.weatherapp.ui.theme.White
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 fun requestLocationPermission(
     activity: ComponentActivity,
@@ -69,37 +71,34 @@ fun checkLocationPermission(activity: ComponentActivity): Boolean {
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var screenProvider: ScreenProvider
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val vm: MainViewModel by viewModels()
         
-        var loctionAllowed: Boolean  = false
-        loctionAllowed = requestLocationPermission(this@MainActivity){
-            loctionAllowed = true
+        var locationAllowed: Boolean
+        locationAllowed = requestLocationPermission(this@MainActivity){
+            locationAllowed = true
             setContent {
-                ScreenHolder(vm, loctionAllowed)
+                ScreenHolder(vm, locationAllowed, screenProvider.screens)
             }
         }
 
         enableEdgeToEdge()
         setContent {
-            ScreenHolder(vm, loctionAllowed)
+            ScreenHolder(vm, locationAllowed, screenProvider.screens)
         }
     }
 }
 
 
 @Composable
-fun ScreenHolder(vm: MainViewModel, locationAllowed: Boolean){
+fun ScreenHolder(vm: MainViewModel, locationAllowed: Boolean, items: List<Screen>){
     var bgColor by remember { mutableStateOf(Color.LightGray) }
     val animatedBgColor by animateColorAsState(targetValue = bgColor)
-    val connectivityState by vm.connectivityState.collectAsState()
-    
-    val items = listOf(
-        Screen.CurrentWeather,
-        Screen.FiveDayWeather,
-        Screen.SearchWeather
-    )
+
     val navController = rememberNavController()
     
     WeatherAppTheme {
@@ -134,13 +133,9 @@ fun ScreenHolder(vm: MainViewModel, locationAllowed: Boolean){
                 }
             }
         ) { innerPadding ->
-            if(!connectivityState){
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Проверьте подключение к интернету", Modifier.fillMaxSize())
-                }
-            }else if(locationAllowed) {
+            if(locationAllowed) {
                 NavHost(navController = navController, startDestination = "current"){
-                    composable(route = Screen.CurrentWeather.route) {
+                    composable(route = Routes.CURRENT_WEATHER) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -154,7 +149,7 @@ fun ScreenHolder(vm: MainViewModel, locationAllowed: Boolean){
                             )
                         }
                     }
-                    composable(route = Screen.FiveDayWeather.route) {
+                    composable(route = Routes.FIVE_DAY_WEATHER) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -168,7 +163,7 @@ fun ScreenHolder(vm: MainViewModel, locationAllowed: Boolean){
                             )
                         }
                     }
-                    composable(route = Screen.SearchWeather.route) {
+                    composable(route = Routes.SEARCH_WEATHER) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -186,7 +181,7 @@ fun ScreenHolder(vm: MainViewModel, locationAllowed: Boolean){
             } else{
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(
-                        text = "Предоставьте разрешение на получение местоположения",
+                        text = stringResource(R.string.require_permissons_location),
                         Modifier.fillMaxSize()
                     )
                 }

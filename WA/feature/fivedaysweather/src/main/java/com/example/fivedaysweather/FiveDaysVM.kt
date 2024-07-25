@@ -9,6 +9,9 @@ import android.location.LocationManager
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.WeatherFiveDay
+import com.example.domain.usecase.GetLocalWeatherFiveUC
+import com.example.domain.usecase.SaveWeatherFiveUC
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,19 +23,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FiveDaysVM @Inject constructor(
-    private val getFivedayWeatherUC: com.example.domain.usecase.GetFivedayWeatherUC,
+    private val getFiveDayWeatherUC: com.example.domain.usecase.GetFiveDayWeatherUC,
     private val checkConnectivityUC: com.example.domain.usecase.ObserveConnectivityUC,
+    private val getLocalFiveDayWeatherUC: GetLocalWeatherFiveUC,
+    private val saveWeatherFiveUC: SaveWeatherFiveUC,
     @ApplicationContext private val context: Context
     ) : ViewModel() {
     private var locationManager : LocationManager? = null
 
-    private val _connectivityState = MutableStateFlow<Boolean>(false)
-    val connectivityState: StateFlow<Boolean> get() = _connectivityState
+    private val _connectivityState = MutableStateFlow(false)
 
     //FiveDay weather states
-    private val _fiveDayState = MutableStateFlow<com.example.domain.WeatherFiveday?>(null)
+    private val _fiveDayState = MutableStateFlow<WeatherFiveDay?>(null)
     private val _fiveDayErrorState = MutableStateFlow<String?>(null)
-    val fiveDayState: StateFlow<com.example.domain.WeatherFiveday?> get() = _fiveDayState
+    val fiveDayState: StateFlow<WeatherFiveDay?> get() = _fiveDayState
     val fiveDayErrorState: StateFlow<String?> get() = _fiveDayErrorState
 
     init {
@@ -43,7 +47,7 @@ class FiveDaysVM @Inject constructor(
         }
     }
 
-    fun getLocation(onReceived: (Pair<Double, Double>?) -> Unit) {
+    private fun getLocation(onReceived: (Pair<Double, Double>?) -> Unit) {
         locationManager = context.getSystemService(LOCATION_SERVICE) as LocationManager?
 
         if (ActivityCompat.checkSelfPermission(
@@ -68,12 +72,25 @@ class FiveDaysVM @Inject constructor(
     }
 
     fun getWeatherFiveDay(){
-        getLocation { coords ->
-            if (coords != null && coords.first != -1.0) viewModelScope.launch {
-                getFivedayWeatherUC.invoke(coords.first, coords.second).collect { weather ->
-                    _fiveDayState.value = weather
-                }
-            } else _fiveDayErrorState.value = "Невозможно получить местоположение"
+        if(!_connectivityState.value){
+            loadSavedData()
+        }else {
+            getLocation { coords ->
+                if (coords != null && coords.first != -1.0) viewModelScope.launch {
+                    getFiveDayWeatherUC.invoke(coords.first, coords.second).collect { weather ->
+                        _fiveDayState.value = weather
+                        saveWeatherFiveUC.invoke(weather)
+                    }
+                } else _fiveDayErrorState.value = context.getString(R.string.cant_get_location)
+            }
+        }
+    }
+
+    private fun loadSavedData(){
+        viewModelScope.launch {
+            getLocalFiveDayWeatherUC.invoke().collect{v ->
+                _fiveDayState.value = v
+            }
         }
     }
 }

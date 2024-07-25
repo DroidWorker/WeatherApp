@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.material)
     implementation(project(":domain"))
     implementation(project(":network"))
+    implementation(project(":localDB"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.widget"
+    namespace = "com.example.fivedaysweather"
     compileSdk = 34
 
     defaultConfig {

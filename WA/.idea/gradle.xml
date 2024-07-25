@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/feature/fivedaysweather" />
             <option value="$PROJECT_DIR$/feature/searchweather" />
             <option value="$PROJECT_DIR$/feature/widget" />
+            <option value="$PROJECT_DIR$/localDB" />
             <option value="$PROJECT_DIR$/network" />
           </set>
         </option>

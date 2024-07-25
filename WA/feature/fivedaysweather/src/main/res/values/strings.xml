@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="in_5_days">В ближайшие 5 дней</string>
+
+    <string name="cant_get_location">Невозможно получить местоположение</string>
+</resources>

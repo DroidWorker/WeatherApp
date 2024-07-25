@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="check_connection">Проверьте подключение к интернету</string>
+    <string name="require_permissons_location">Предоставьте разрешение на получение местоположения</string>
+    <string name="today">сегодня</string>
+    <string name="_5_day">5 дней</string>
+    <string name="search">поиск</string>
 </resources>

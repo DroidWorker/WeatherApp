@@ -30,7 +30,7 @@ import java.util.Date
 import kotlin.math.roundToInt
 
 @Composable
-fun WeatherItem(weather: com.example.domain.WeatherItem){
+fun WeatherItem(weather: WeatherItem){
     Box(modifier = Modifier.padding(4.dp).background(color = Color.White.copy(alpha = 0.15f))) {
         Row (modifier = Modifier.height(IntrinsicSize.Min)){
             Column {

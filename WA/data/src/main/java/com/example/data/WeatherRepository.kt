@@ -1,19 +1,19 @@
 package com.example.data
 
-import com.example.domain.FivedayResponce
+import com.example.domain.FiveDayResponse
 import com.example.domain.WeatherRepository
-import com.example.domain.WeatherResponce
+import com.example.domain.WeatherResponse
 import com.example.network.retrofit.WeatherApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class WeatherRepositoryImpl(var weatherApi: WeatherApi) :
-    com.example.domain.WeatherRepository {
+    WeatherRepository {
 
-    override fun getWeatherToday(lat: Double, long: Double): Flow<com.example.domain.WeatherResponce> =
+    override fun getWeatherToday(lat: Double, long: Double): Flow<WeatherResponse> =
         flow { emit(weatherApi.getWeather(lat.toString(), long.toString())) }
 
-    override fun searchWeather(city: String): Flow<com.example.domain.WeatherResponce?> = flow {
+    override fun searchWeather(city: String): Flow<WeatherResponse?> = flow {
         try {
             val response = weatherApi.searchWeather(city)
             emit(response)
@@ -22,7 +22,7 @@ class WeatherRepositoryImpl(var weatherApi: WeatherApi) :
         }
     }
 
-    override fun getFiveDay(lat: Double, long: Double): Flow<com.example.domain.FivedayResponce> =
-        flow { emit(weatherApi.getFivedayWeather(lat.toString(), long.toString())) }
+    override fun getFiveDay(lat: Double, long: Double): Flow<FiveDayResponse> =
+        flow { emit(weatherApi.getFiveDayWeather(lat.toString(), long.toString())) }
 
 }
