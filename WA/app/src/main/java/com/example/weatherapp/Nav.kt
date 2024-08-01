@@ -11,9 +11,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 sealed class Screen(val route: String, val icon: ImageVector, val text: String) {
-    class CurrentWeather(context: Context) : Screen(Routes.CURRENT_WEATHER, Icons.Rounded.LocationOn, context.getString(R.string.today))
-    class FiveDayWeather(context: Context) : Screen(Routes.FIVE_DAY_WEATHER, Icons.Rounded.DateRange, context.getString(R.string._5_day))
-    class SearchWeather(context: Context) : Screen(Routes.SEARCH_WEATHER, Icons.Rounded.Search, context.getString(R.string.search))
+    class CurrentWeather(context: Context) :
+        Screen(Routes.CURRENT_WEATHER, Icons.Rounded.LocationOn, context.getString(R.string.today))
+
+    class FiveDayWeather(context: Context) :
+        Screen(Routes.FIVE_DAY_WEATHER, Icons.Rounded.DateRange, context.getString(R.string._5_day))
+
+    class SearchWeather(context: Context) :
+        Screen(Routes.SEARCH_WEATHER, Icons.Rounded.Search, context.getString(R.string.search))
 }
 
 @Singleton

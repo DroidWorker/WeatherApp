@@ -30,23 +30,32 @@ fun FiveDaysScreen(modifier: Modifier, changeBackground: (Color) -> Unit) {
         vm.getWeatherFiveDay()
     }
 
-    if(weatherState!=null) Column(
+    if (weatherState != null) Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Text(text = stringResource(R.string.in_5_days), fontSize = 30.sp, color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
-        Text(text = weatherState!!.city, color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
+    ) {
+        Text(
+            text = stringResource(R.string.in_5_days),
+            fontSize = 30.sp,
+            color = Color.White,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+        Text(
+            text = weatherState!!.city,
+            color = Color.White,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
         LazyColumn {
-            items(weatherState!!.weatherList.size){item ->
+            items(weatherState!!.weatherList.size) { item ->
                 WeatherItem(weather = weatherState!!.weatherList[item])
             }
         }
-    } else if(errorState!=null){
-        Box (
+    } else if (errorState != null) {
+        Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxSize()
-        ){
+        ) {
             Text(errorState ?: "")
         }
     } else CircularProgressIndicator()

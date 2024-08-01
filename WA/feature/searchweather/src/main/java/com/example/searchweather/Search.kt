@@ -57,19 +57,19 @@ fun SearchScreen(modifier: Modifier, changeBackground: (Color) -> Unit) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
         SearchBar(
             query = searchText, // текст, отображаемый в SearchBar
             enabled = connectionState,
             onQueryChange = { q -> vm.onSearchTextChange(q) }, // обновление значения searchText
             onSearch = vm::onPressSearch, // обратный вызов, который будет вызван, когда служба ввода активирует действие ImeAction.Search
             active = inSearch, //выполняет ли пользователь поиск или нет
-            onActiveChange = {state -> vm.onSearchbarStateChanged(state) }, //обратный вызов, который будет вызван при изменении активного состояния этой строки поиска
+            onActiveChange = { state -> vm.onSearchbarStateChanged(state) }, //обратный вызов, который будет вызван при изменении активного состояния этой строки поиска
             trailingIcon = {
                 TextButton(
                     onClick = {
-                    vm.onPressSearch(searchText)
-                }
+                        vm.onPressSearch(searchText)
+                    }
                 ) {
                     Icon(Icons.Rounded.Search, contentDescription = "")
                 }
@@ -78,16 +78,18 @@ fun SearchScreen(modifier: Modifier, changeBackground: (Color) -> Unit) {
                 .fillMaxWidth()
                 .padding(16.dp)
                 .heightIn(min = 56.dp, max = 300.dp)
-        ){
-            LazyColumn{
+        ) {
+            LazyColumn {
                 items(queries.size) { i ->
                     Text(
-                        text =  queries[i],
-                        modifier = Modifier.padding(
-                            start = 8.dp,
-                            top = 4.dp,
-                            end = 8.dp,
-                            bottom = 4.dp)
+                        text = queries[i],
+                        modifier = Modifier
+                            .padding(
+                                start = 8.dp,
+                                top = 4.dp,
+                                end = 8.dp,
+                                bottom = 4.dp
+                            )
                             .clickable(onClick = {
                                 vm.onSearchTextChange(queries[i])
                                 vm.onSearchbarStateChanged(false)
@@ -97,34 +99,56 @@ fun SearchScreen(modifier: Modifier, changeBackground: (Color) -> Unit) {
                 }
             }
         }
-        if(weatherState!=null){
-            Column (
+        if (weatherState != null) {
+            Column(
                 Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.SpaceBetween
-            ){
-                Row(verticalAlignment = Alignment.Bottom, modifier = Modifier.padding(horizontal = 16.dp, vertical = 30.dp)) {
-                    Text(text = vm.getTime(weatherState!!.dt), color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.W700, modifier = Modifier.padding(vertical = 8.dp))
-                    Text(text = weatherState!!.city, color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
+            ) {
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 30.dp)
+                ) {
+                    Text(
+                        text = vm.getTime(weatherState!!.dt),
+                        color = Color.White,
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.W700,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                    Text(
+                        text = weatherState!!.city,
+                        color = Color.White,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
                 }
-                Row( verticalAlignment = Alignment.CenterVertically) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     AsyncImage(
                         model = weatherState!!.iconUrl,
                         contentDescription = null,
-                        modifier= Modifier.size(200.dp)
+                        modifier = Modifier.size(200.dp)
                     )
                     Spacer(modifier = Modifier.width(20.dp))
                     Column {
-                        Text(text = " ${weatherState!!.temp.roundToInt()}°",  color = Color.White, fontSize = 45.sp, fontWeight = FontWeight.W700)
-                        Text(text = stringResource(R.string.feels_like, weatherState!!.feelsLike), color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
+                        Text(
+                            text = " ${weatherState!!.temp.roundToInt()}°",
+                            color = Color.White,
+                            fontSize = 45.sp,
+                            fontWeight = FontWeight.W700
+                        )
+                        Text(
+                            text = stringResource(R.string.feels_like, weatherState!!.feelsLike),
+                            color = Color.White,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
                     }
                 }
-                Row (
+                Row(
                     modifier = Modifier
                         .padding(vertical = 8.dp, horizontal = 16.dp)
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
-                ){
+                ) {
                     IconWithText(
                         ImageVector.vectorResource(id = R.drawable.humidity_percentage_24dp_ffffff_fill0_wght400_grad0_opsz24),
                         weatherState!!.humidity.toString()
@@ -137,23 +161,27 @@ fun SearchScreen(modifier: Modifier, changeBackground: (Color) -> Unit) {
                         ImageVector.vectorResource(id = R.drawable.max),
                         "${weatherState!!.tempMax}"
                     )
-                    Text(text = weatherState!!.weather.description, color = Color.White, fontSize = 20.sp)
+                    Text(
+                        text = weatherState!!.weather.description,
+                        color = Color.White,
+                        fontSize = 20.sp
+                    )
                 }
             }
-        }else if(errorState!=null){
-            Box (
+        } else if (errorState != null) {
+            Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
-            ){
+            ) {
                 Text(errorState ?: "")
             }
-        }else if(!connectionState){
-            Box (
+        } else if (!connectionState) {
+            Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
-            ){
+            ) {
                 Text("Нет подключения к интернету")
             }
-        } else if(!isFirstLaunch) CircularProgressIndicator()
+        } else if (!isFirstLaunch) CircularProgressIndicator()
     }
 }

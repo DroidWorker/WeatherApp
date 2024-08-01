@@ -18,7 +18,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,7 +43,7 @@ import javax.inject.Inject
 fun requestLocationPermission(
     activity: ComponentActivity,
     onGranted: () -> Unit
-):Boolean {
+): Boolean {
     val permissionLauncher = activity.registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
@@ -77,9 +76,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val vm: MainViewModel by viewModels()
-        
+
         var locationAllowed: Boolean
-        locationAllowed = requestLocationPermission(this@MainActivity){
+        locationAllowed = requestLocationPermission(this@MainActivity) {
             locationAllowed = true
             setContent {
                 ScreenHolder(vm, locationAllowed, screenProvider.screens)
@@ -95,12 +94,12 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun ScreenHolder(vm: MainViewModel, locationAllowed: Boolean, items: List<Screen>){
+fun ScreenHolder(vm: MainViewModel, locationAllowed: Boolean, items: List<Screen>) {
     var bgColor by remember { mutableStateOf(Color.LightGray) }
     val animatedBgColor by animateColorAsState(targetValue = bgColor)
 
     val navController = rememberNavController()
-    
+
     WeatherAppTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -133,8 +132,8 @@ fun ScreenHolder(vm: MainViewModel, locationAllowed: Boolean, items: List<Screen
                 }
             }
         ) { innerPadding ->
-            if(locationAllowed) {
-                NavHost(navController = navController, startDestination = "current"){
+            if (locationAllowed) {
+                NavHost(navController = navController, startDestination = "current") {
                     composable(route = Routes.CURRENT_WEATHER) {
                         Box(
                             modifier = Modifier
@@ -178,7 +177,7 @@ fun ScreenHolder(vm: MainViewModel, locationAllowed: Boolean, items: List<Screen
                         }
                     }
                 }
-            } else{
+            } else {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(
                         text = stringResource(R.string.require_permissons_location),

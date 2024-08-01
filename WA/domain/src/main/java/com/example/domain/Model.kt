@@ -12,12 +12,14 @@ data class WeatherResponse(
     val clouds: Clouds,
     val name: String
 )
+
 data class FiveDayResponse(
     val cod: String,
     val cnt: Int,
     val list: List<WeatherItemResponse>,
     val city: CIty
 )
+
 data class WeatherItemResponse(
     val dt: Int,
     val main: MainData,
@@ -37,17 +39,27 @@ data class WeatherCurrent(
     val humidity: Int,
     val weather: WeatherDescription,
     var iconUrl: String?
-){
+) {
     object ModelMapper {
         fun from(form: WeatherResponse) =
-            WeatherCurrent(form.dt, form.name, form.main.temp, form.main.feels_like, form.main.temp_min, form.main.temp_max, form.main.humidity, form.weather.first(), null)
+            WeatherCurrent(
+                form.dt,
+                form.name,
+                form.main.temp,
+                form.main.feels_like,
+                form.main.temp_min,
+                form.main.temp_max,
+                form.main.humidity,
+                form.weather.first(),
+                null
+            )
     }
 }
 
 data class WeatherFiveDay(
     val city: String,
     val weatherList: List<WeatherItem>,
-){
+) {
     object ModelMapper {
         fun from(form: FiveDayResponse) =
             WeatherFiveDay(form.city.name, form.list.map { WeatherItem.ModelMapper.from(it) })
@@ -62,7 +74,7 @@ data class WeatherDescription(
 )
 
 data class MainData(
-    val temp:Double,
+    val temp: Double,
     val feels_like: Double,
     val temp_min: Double,
     val temp_max: Double,
@@ -76,7 +88,7 @@ data class WeatherItem(
     val weather: WeatherDescription,
     val dt_txt: String,
     var iconUrl: String?
-){
+) {
     object ModelMapper {
         fun from(form: WeatherItemResponse) =
             WeatherItem(form.dt, form.main, form.weather.first(), form.dt_txt, null)
@@ -98,7 +110,8 @@ inline fun <reified T : Any, reified R : Any> T.convertTo(
     extraParamName: String? = null,
     extraParamValue: Any? = null
 ): R {
-    val constructor = targetClass.primaryConstructor ?: throw IllegalArgumentException("No primary constructor found for $targetClass")
+    val constructor = targetClass.primaryConstructor
+        ?: throw IllegalArgumentException("No primary constructor found for $targetClass")
     val parameterMap = constructor.parameters.mapNotNull { param ->
         when (param.name) {
             extraParamName -> param to extraParamValue

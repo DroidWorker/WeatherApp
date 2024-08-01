@@ -28,8 +28,8 @@ class FiveDaysVM @Inject constructor(
     private val getLocalFiveDayWeatherUC: GetLocalWeatherFiveUC,
     private val saveWeatherFiveUC: SaveWeatherFiveUC,
     @ApplicationContext private val context: Context
-    ) : ViewModel() {
-    private var locationManager : LocationManager? = null
+) : ViewModel() {
+    private var locationManager: LocationManager? = null
 
     private val _connectivityState = MutableStateFlow(false)
 
@@ -71,10 +71,10 @@ class FiveDaysVM @Inject constructor(
         }
     }
 
-    fun getWeatherFiveDay(){
-        if(!_connectivityState.value){
+    fun getWeatherFiveDay() {
+        if (!_connectivityState.value) {
             loadSavedData()
-        }else {
+        } else {
             getLocation { coords ->
                 if (coords != null && coords.first != -1.0) viewModelScope.launch {
                     getFiveDayWeatherUC.invoke(coords.first, coords.second).collect { weather ->
@@ -86,9 +86,9 @@ class FiveDaysVM @Inject constructor(
         }
     }
 
-    private fun loadSavedData(){
+    private fun loadSavedData() {
         viewModelScope.launch {
-            getLocalFiveDayWeatherUC.invoke().collect{v ->
+            getLocalFiveDayWeatherUC.invoke().collect { v ->
                 _fiveDayState.value = v
             }
         }

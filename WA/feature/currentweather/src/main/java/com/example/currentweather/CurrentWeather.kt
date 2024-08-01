@@ -57,10 +57,10 @@ fun TodayScreen(modifier: Modifier, changeBackground: (Color) -> Unit) {
     val errorState by vm.errorState.collectAsState()
     val connectivityState by vm.connectivityState.collectAsState()
 
-    var expanded by remember{ mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
     val timesState by vm.timesState.collectAsState()
     var selectedOption by remember { mutableIntStateOf(0) }
-    if(timesState.isNotEmpty()&&selectedOption==0)selectedOption=timesState.first()
+    if (timesState.isNotEmpty() && selectedOption == 0) selectedOption = timesState.first()
 
     LaunchedEffect(Unit) {
         vm.getWeatherToday()
@@ -69,26 +69,43 @@ fun TodayScreen(modifier: Modifier, changeBackground: (Color) -> Unit) {
         changeBackground(vm.getBgColor(it.weather.icon))
     }
 
-    if(weatherState!=null) Column(
+    if (weatherState != null) Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
         var offset = Offset.Zero
-        if(connectivityState)Text(text = vm.getCurrentFormattedDate(), color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
+        if (connectivityState) Text(
+            text = vm.getCurrentFormattedDate(),
+            color = Color.White,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
         else Card(
-            colors = CardColors(containerColor = Color.Transparent, contentColor = Color.Transparent, disabledContentColor = Color.Transparent, disabledContainerColor = Color.Transparent ),
+            colors = CardColors(
+                containerColor = Color.Transparent,
+                contentColor = Color.Transparent,
+                disabledContentColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent
+            ),
             modifier = Modifier
-            .clickable { expanded = true }
+                .clickable { expanded = true }
                 .align(Alignment.CenterHorizontally)
-            .pointerInteropFilter {
-                offset = Offset(it.x, it.y)
-                false
-            }
+                .pointerInteropFilter {
+                    offset = Offset(it.x, it.y)
+                    false
+                }
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-            Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-                Text(text = vm.getDate(selectedOption), color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
-                Icon(Icons.Sharp.KeyboardArrowDown,
+                Text(
+                    text = vm.getDate(selectedOption),
+                    color = Color.White,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+                Icon(
+                    Icons.Sharp.KeyboardArrowDown,
                     tint = Color.White,
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)
@@ -96,13 +113,16 @@ fun TodayScreen(modifier: Modifier, changeBackground: (Color) -> Unit) {
             }
             DropdownMenu(
                 expanded = expanded,
-                offset = DpOffset((pxToDp(offset.x, DisplayMetrics())).dp, (pxToDp(offset.y, DisplayMetrics())).dp),
+                offset = DpOffset(
+                    (pxToDp(offset.x, DisplayMetrics())).dp,
+                    (pxToDp(offset.y, DisplayMetrics())).dp
+                ),
                 onDismissRequest = { expanded = false },
                 properties = PopupProperties(focusable = false)
             ) {
                 timesState.forEach { option ->
                     DropdownMenuItem(
-                        text = { Text(text = vm.getDate(option))},
+                        text = { Text(text = vm.getDate(option)) },
                         onClick = {
                             selectedOption = option
                             expanded = false
@@ -112,25 +132,44 @@ fun TodayScreen(modifier: Modifier, changeBackground: (Color) -> Unit) {
                 }
             }
         }
-        Text(text = vm.getTime(weatherState!!.dt), color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.W700, modifier = Modifier.padding(vertical = 8.dp))
-        Text(text = weatherState!!.city, color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
+        Text(
+            text = vm.getTime(weatherState!!.dt),
+            color = Color.White,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.W700,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
+        Text(
+            text = weatherState!!.city,
+            color = Color.White,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
         Box(modifier = Modifier.weight(1f))
         AsyncImage(
             model = weatherState!!.iconUrl,
             contentDescription = null,
-            modifier= Modifier.size(200.dp)
+            modifier = Modifier.size(200.dp)
         )
-        Text(text = " ${weatherState!!.temp.roundToInt()}°",  color = Color.White, fontSize = 45.sp, fontWeight = FontWeight.W700)
+        Text(
+            text = " ${weatherState!!.temp.roundToInt()}°",
+            color = Color.White,
+            fontSize = 45.sp,
+            fontWeight = FontWeight.W700
+        )
         Box(modifier = Modifier.weight(1f))
-        Text(text = "Ощущается как ${weatherState!!.feelsLike}", color = Color.White, modifier = Modifier.padding(vertical = 8.dp))
+        Text(
+            text = "Ощущается как ${weatherState!!.feelsLike}",
+            color = Color.White,
+            modifier = Modifier.padding(vertical = 8.dp)
+        )
         HorizontalDivider(modifier = Modifier.padding(horizontal = 40.dp))
-        Row (
+        Row(
             modifier = Modifier
                 .padding(vertical = 8.dp, horizontal = 16.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             IconWithText(
                 ImageVector.vectorResource(id = R.drawable.humidity_percentage_24dp_ffffff_fill0_wght400_grad0_opsz24),
                 weatherState!!.humidity.toString()
@@ -145,11 +184,11 @@ fun TodayScreen(modifier: Modifier, changeBackground: (Color) -> Unit) {
             )
             Text(text = weatherState!!.weather.description, color = Color.White, fontSize = 20.sp)
         }
-    } else if(errorState!=null){
-        Box (
+    } else if (errorState != null) {
+        Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxSize()
-        ){
+        ) {
             Text(errorState ?: "")
         }
     } else Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

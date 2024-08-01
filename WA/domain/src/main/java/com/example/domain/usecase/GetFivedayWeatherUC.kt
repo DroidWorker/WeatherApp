@@ -11,7 +11,7 @@ class GetFiveDayWeatherUC(private val repository: WeatherRepository) {
     operator fun invoke(lat: Double, long: Double): Flow<WeatherFiveDay> {
         return repository.getFiveDay(lat, long).map { response ->
             val weatherFiveDay = WeatherFiveDay.ModelMapper.from(response)
-            weatherFiveDay.weatherList.forEach{
+            weatherFiveDay.weatherList.forEach {
                 it.iconUrl = "${BuildConfig.BASE_IMG_URL}${it.weather.icon}.png"
             }
             weatherFiveDay

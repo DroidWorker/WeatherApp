@@ -34,9 +34,9 @@ class CurrentWeatherVM @Inject constructor(
     private val saveWeatherUC: SaveWeatherUC,
     private val getLocalWeatherUC: GetLocalWeatherUC,
     @ApplicationContext private val context: Context
-): ViewModel() {
+) : ViewModel() {
 
-    private var locationManager : LocationManager? = null
+    private var locationManager: LocationManager? = null
 
     val connectivityState = MutableStateFlow(false)
 
@@ -82,9 +82,9 @@ class CurrentWeatherVM @Inject constructor(
     }
 
     fun getWeatherToday() {
-        if(!connectivityState.value){
+        if (!connectivityState.value) {
             loadSavedData()
-        }else {
+        } else {
             getLocation { coords ->
                 if (coords != null && coords.first != -1.0) viewModelScope.launch {
                     weatherTodayUC.invoke(coords.first, coords.second).collect { weather ->
@@ -96,22 +96,22 @@ class CurrentWeatherVM @Inject constructor(
         }
     }
 
-    private fun loadSavedData(){
+    private fun loadSavedData() {
         viewModelScope.launch {
-            getLocalWeatherUC.invoke().collect{weather ->
+            getLocalWeatherUC.invoke().collect { weather ->
                 _weatherState.value = weather
             }
         }
         viewModelScope.launch {
-            getLocalWeatherUC.getTimes().collect{times ->
+            getLocalWeatherUC.getTimes().collect { times ->
                 _timesState.value = times.reversed()
             }
         }
     }
 
-    fun loadSavedWeatherByDate(dt: Int){
+    fun loadSavedWeatherByDate(dt: Int) {
         viewModelScope.launch {
-            getLocalWeatherUC.getWeatherByDate(dt).collect{weather ->
+            getLocalWeatherUC.getWeatherByDate(dt).collect { weather ->
                 _weatherState.value = weather
             }
         }
@@ -119,7 +119,8 @@ class CurrentWeatherVM @Inject constructor(
 
     fun getCurrentFormattedDate(): String {
         val currentDateTime = Date()
-        val dateFormat = SimpleDateFormat(context.getString(R.string.eeee_d_mmmm), Locale("ru", "RU"))
+        val dateFormat =
+            SimpleDateFormat(context.getString(R.string.eeee_d_mmmm), Locale("ru", "RU"))
         return dateFormat.format(currentDateTime)
     }
 
@@ -130,9 +131,11 @@ class CurrentWeatherVM @Inject constructor(
 
         return dateFormat.format(Date(timeInMillis))
     }
+
     fun getDate(utc: Int): String {
         val timeInMillis = (utc + 10800) * 1000L
-        val dateFormat = SimpleDateFormat(context.getString(R.string.eeee_d_mmmmhh_mm), Locale("ru", "RU"))
+        val dateFormat =
+            SimpleDateFormat(context.getString(R.string.eeee_d_mmmmhh_mm), Locale("ru", "RU"))
         dateFormat.timeZone = TimeZone.getTimeZone("UTC") // Устанавливаем UTC временную зону
 
         return dateFormat.format(Date(timeInMillis))

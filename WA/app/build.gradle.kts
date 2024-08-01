@@ -56,10 +56,10 @@ dependencies {
     implementation(project(":feature:fivedaysweather"))
     implementation(project(":feature:searchweather"))
     implementation(project(":feature:widget"))
-    implementation(project(":network"))
+    implementation(project(":core:network"))
     implementation(project(":domain"))
-    implementation(project(":di"))
-    implementation(project(":data"))
+    implementation(project(":core:di"))
+    implementation(project(":core:data"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

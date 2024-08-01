@@ -21,7 +21,7 @@ class SearchVM @Inject constructor(
     private val searchWeatherByCityUC: SearchWeatherByCityUC,
     private val checkConnectivityUC: com.example.domain.usecase.ObserveConnectivityUC,
     @ApplicationContext private val context: Context
-): ViewModel() {
+) : ViewModel() {
 
     //Search states
     private val _searchedWeatherState = MutableStateFlow<com.example.domain.WeatherCurrent?>(null)
@@ -47,32 +47,33 @@ class SearchVM @Inject constructor(
             }
         }
         viewModelScope.launch {
-            searchWeatherByCityUC.getUserQueries().collect{
+            searchWeatherByCityUC.getUserQueries().collect {
                 _queries.value = it
             }
         }
     }
 
-    private fun searchWeather(){
+    private fun searchWeather() {
         _inSearchState.value = false
         _isFirstLaunch.value = false
         viewModelScope.launch {
-            if(searchText.value.isNotEmpty())searchWeatherByCityUC.saveQuery(searchText.value)
+            if (searchText.value.isNotEmpty()) searchWeatherByCityUC.saveQuery(searchText.value)
             searchWeatherByCityUC.invoke(searchText.value).collect { weather ->
                 _searchedWeatherState.value = weather
-                if(weather==null) _inError.value= context.getString(R.string.nothing_to_show)
+                if (weather == null) _inError.value = context.getString(R.string.nothing_to_show)
             }
         }
     }
-    fun  onSearchTextChange (q: String) {
+
+    fun onSearchTextChange(q: String) {
         _searchText.value = q
     }
 
-    fun onSearchbarStateChanged(state:Boolean){
+    fun onSearchbarStateChanged(state: Boolean) {
         _inSearchState.value = state
     }
 
-    fun  onPressSearch (q: String) {
+    fun onPressSearch(q: String) {
         _searchText.value = q
         searchWeather()
     }
@@ -91,6 +92,7 @@ class SearchVM @Inject constructor(
             else -> Color.Gray
         }
     }
+
     fun getTime(utc: Int): String {
         val timeInMillis = (utc + 10800) * 1000L
         val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())

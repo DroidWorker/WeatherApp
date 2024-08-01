@@ -30,11 +30,19 @@ import java.util.Date
 import kotlin.math.roundToInt
 
 @Composable
-fun WeatherItem(weather: WeatherItem){
-    Box(modifier = Modifier.padding(4.dp).background(color = Color.White.copy(alpha = 0.15f))) {
-        Row (modifier = Modifier.height(IntrinsicSize.Min)){
+fun WeatherItem(weather: WeatherItem) {
+    Box(modifier = Modifier
+        .padding(4.dp)
+        .background(color = Color.White.copy(alpha = 0.15f))) {
+        Row(modifier = Modifier.height(IntrinsicSize.Min)) {
             Column {
-                Text(text = reformatStringDate(weather.dt_txt), color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.W700, modifier = Modifier.padding(vertical = 8.dp))
+                Text(
+                    text = reformatStringDate(weather.dt_txt),
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.W700,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
                 AsyncImage(
                     model = weather.iconUrl,
                     contentDescription = null,
@@ -81,7 +89,7 @@ fun WeatherItem(weather: WeatherItem){
 }
 
 @SuppressLint("SimpleDateFormat")
-fun reformatStringDate(date: String): String{
+fun reformatStringDate(date: String): String {
     val inputformat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     val outputformat = SimpleDateFormat("dd.MM HH:mm")
     val parceDate: Date = inputformat.parse(date)

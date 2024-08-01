@@ -30,6 +30,6 @@ fun IconWithText(icon: ImageVector = Icons.Rounded.Add, text: String = "") {
             modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = text, color = Color.White,  fontSize = 16.sp)
+        Text(text = text, color = Color.White, fontSize = 16.sp)
     }
 }
